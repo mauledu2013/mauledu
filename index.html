@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마을과 교육공동체</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F7F2EA;
+    --warm-white: #FDFAF5;
+    --forest: #2D5A3D;
+    --forest-light: #3D7A55;
+    --amber: #C8813A;
+    --amber-light: #E8A55A;
+    --earth: #7C5C3A;
+    --text-dark: #1E2B1E;
+    --text-mid: #4A5C4A;
+    --text-light: #8A9A8A;
+    --border: rgba(45,90,61,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--warm-white);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(253,250,245,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: 0 4px 24px rgba(45,90,61,0.08); }
+  .nav-logo {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--forest); letter-spacing: -0.02em;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.875rem; font-weight: 400; color: var(--text-mid);
+    text-decoration: none; letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--forest); }
+  .nav-cta {
+    background: var(--forest); color: #fff !important;
+    padding: 0.5rem 1.25rem; border-radius: 2rem;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--forest-light) !important; color: #fff !important; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 3rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 70% 40%, rgba(200,129,58,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 20% 80%, rgba(45,90,61,0.06) 0%, transparent 60%);
+  }
+  .hero-dots {
+    position: absolute; top: 15%; right: 8%;
+    width: 240px; height: 240px; z-index: 0;
+    background-image: radial-gradient(circle, rgba(45,90,61,0.15) 1.5px, transparent 1.5px);
+    background-size: 20px 20px;
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
+
+  .hero-content { position: relative; z-index: 1; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(45,90,61,0.08); border: 1px solid rgba(45,90,61,0.2);
+    color: var(--forest); padding: 0.35rem 1rem; border-radius: 2rem;
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--amber); border-radius: 50%; }
+
+  .hero-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    font-weight: 700; line-height: 1.2;
+    color: var(--text-dark); letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .hero-title em {
+    font-style: normal; color: var(--forest);
+    border-bottom: 3px solid var(--amber-light);
+  }
+
+  .hero-quote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 1.05rem;
+    color: var(--earth); line-height: 1.8;
+    margin-bottom: 0.5rem;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .hero-quote-source {
+    font-size: 0.78rem; color: var(--text-light); letter-spacing: 0.08em;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s 0.25s ease both;
+  }
+
+  .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.8s 0.3s ease both; }
+  .btn-primary {
+    background: var(--forest); color: #fff;
+    padding: 0.85rem 2rem; border-radius: 0.5rem;
+    font-size: 0.95rem; font-weight: 500; text-decoration: none;
+    transition: all 0.25s; border: none; cursor: pointer;
+    letter-spacing: 0.01em;
+  }
+  .btn-primary:hover { background: var(--forest-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(45,90,61,0.25); }
+  .btn-secondary {
+    background: transparent; color: var(--forest);
+    padding: 0.85rem 2rem; border-radius: 0.5rem;
+    font-size: 0.95rem; font-weight: 500; text-decoration: none;
+    border: 2px solid var(--forest); transition: all 0.25s; cursor: pointer;
+  }
+  .btn-secondary:hover { background: rgba(45,90,61,0.06); transform: translateY(-2px); }
+
+  .hero-visual { position: relative; z-index: 1; display: flex; justify-content: center; align-items: center; }
+  .hero-card {
+    background: #fff; border-radius: 1.5rem;
+    padding: 2.5rem; box-shadow: 0 20px 60px rgba(45,90,61,0.12);
+    width: 100%; max-width: 380px;
+    animation: fadeUp 0.8s 0.15s ease both;
+    border: 1px solid rgba(45,90,61,0.08);
+  }
+  .hero-card-label {
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em;
+    color: var(--amber); text-transform: uppercase; margin-bottom: 1.2rem;
+  }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .stat-item { padding: 1rem; background: var(--cream); border-radius: 0.75rem; }
+  .stat-num {
+    font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700;
+    color: var(--forest); line-height: 1;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--text-mid); margin-top: 0.3rem; line-height: 1.4; }
+  .programs-list { margin-top: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .prog-item {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.6rem 0.8rem; border-radius: 0.5rem;
+    font-size: 0.82rem; color: var(--text-mid);
+    transition: background 0.2s;
+  }
+  .prog-item:hover { background: var(--cream); }
+  .prog-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); flex-shrink: 0; }
+  .prog-dot.green { background: var(--forest-light); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── SECTION COMMON ── */
+  section { padding: 6rem 3rem; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
+    color: var(--amber); text-transform: uppercase; margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 700;
+    color: var(--text-dark); line-height: 1.3; letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  .section-desc { font-size: 1rem; color: var(--text-mid); line-height: 1.9; max-width: 600px; }
+
+  /* ── ABOUT ── */
+  #about { background: var(--cream); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-top: 3.5rem; }
+  .about-text p { font-size: 0.95rem; color: var(--text-mid); line-height: 2; margin-bottom: 1rem; }
+  .about-values { display: flex; flex-direction: column; gap: 1rem; }
+  .value-card {
+    background: #fff; padding: 1.5rem; border-radius: 1rem;
+    border-left: 4px solid var(--forest);
+    box-shadow: 0 4px 16px rgba(45,90,61,0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .value-card:nth-child(2) { border-left-color: var(--amber); }
+  .value-card:nth-child(3) { border-left-color: var(--forest-light); }
+  .value-card:hover { transform: translateX(4px); box-shadow: 0 8px 24px rgba(45,90,61,0.1); }
+  .value-title { font-family: 'Noto Serif KR', serif; font-weight: 600; font-size: 1rem; color: var(--text-dark); margin-bottom: 0.4rem; }
+  .value-desc { font-size: 0.82rem; color: var(--text-mid); line-height: 1.7; }
+
+  /* ── PROGRAMS ── */
+  #programs { background: var(--warm-white); }
+  .programs-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
+  .prog-tabs { display: flex; gap: 0.5rem; }
+  .tab-btn {
+    padding: 0.4rem 1rem; border-radius: 2rem; border: 1px solid var(--border);
+    background: transparent; font-size: 0.8rem; color: var(--text-mid);
+    cursor: pointer; transition: all 0.2s; font-family: 'Noto Sans KR', sans-serif;
+  }
+  .tab-btn.active { background: var(--forest); color: #fff; border-color: var(--forest); }
+  .tab-btn:hover:not(.active) { border-color: var(--forest); color: var(--forest); }
+
+  .programs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .prog-card {
+    background: #fff; border-radius: 1.25rem;
+    padding: 2rem; border: 1px solid var(--border);
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .prog-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--forest);
+  }
+  .prog-card:nth-child(2n)::before { background: var(--amber); }
+  .prog-card:nth-child(3n)::before { background: var(--forest-light); }
+  .prog-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(45,90,61,0.12); border-color: rgba(45,90,61,0.2); }
+  .prog-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: var(--cream); display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; margin-bottom: 1.2rem;
+  }
+  .prog-category { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; color: var(--amber); text-transform: uppercase; margin-bottom: 0.5rem; }
+  .prog-name { font-family: 'Noto Serif KR', serif; font-size: 1.05rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.7rem; line-height: 1.4; }
+  .prog-desc { font-size: 0.82rem; color: var(--text-mid); line-height: 1.8; }
+  .prog-tag {
+    display: inline-block; margin-top: 1rem;
+    background: var(--cream); color: var(--forest);
+    font-size: 0.72rem; padding: 0.25rem 0.75rem; border-radius: 2rem;
+  }
+
+  /* ── ACTIVITY ── */
+  #activity { background: var(--forest); color: #fff; }
+  #activity .section-label { color: var(--amber-light); }
+  #activity .section-title { color: #fff; }
+  #activity .section-desc { color: rgba(255,255,255,0.7); }
+  .timeline { margin-top: 3rem; display: flex; flex-direction: column; gap: 0; position: relative; }
+  .timeline::before {
+    content: ''; position: absolute; left: 80px; top: 0; bottom: 0; width: 1px;
+    background: rgba(255,255,255,0.15);
+  }
+  .tl-item { display: grid; grid-template-columns: 80px 1fr; gap: 2rem; padding: 1.5rem 0; position: relative; }
+  .tl-year {
+    font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700;
+    color: var(--amber-light); text-align: right; padding-right: 1.5rem; padding-top: 0.2rem;
+  }
+  .tl-content {
+    padding-left: 2rem; padding-bottom: 1.5rem;
+    border-left: none; position: relative;
+  }
+  .tl-content::before {
+    content: ''; position: absolute; left: -0.45rem; top: 0.4rem;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--amber); border: 2px solid var(--forest);
+  }
+  .tl-title { font-family: 'Noto Serif KR', serif; font-weight: 600; font-size: 1rem; margin-bottom: 0.4rem; }
+  .tl-desc { font-size: 0.82rem; color: rgba(255,255,255,0.65); line-height: 1.7; }
+
+  /* ── CTA ── */
+  #cta { background: var(--cream); }
+  .cta-box {
+    background: #fff; border-radius: 2rem; padding: 4rem;
+    text-align: center; max-width: 700px; margin: 0 auto;
+    box-shadow: 0 24px 60px rgba(45,90,61,0.1);
+    border: 1px solid rgba(45,90,61,0.08);
+  }
+  .cta-emoji { font-size: 3rem; margin-bottom: 1.5rem; display: block; }
+  .cta-title { font-family: 'Noto Serif KR', serif; font-size: 1.8rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1rem; line-height: 1.4; }
+  .cta-desc { font-size: 0.95rem; color: var(--text-mid); line-height: 1.9; margin-bottom: 2rem; }
+  .cta-info { font-size: 0.85rem; color: var(--text-light); margin-top: 1.5rem; line-height: 1.8; }
+  .cta-info strong { color: var(--text-mid); }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--warm-white); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 3rem; align-items: start; }
+  .contact-items { display: flex; flex-direction: column; gap: 1.2rem; }
+  .contact-item {
+    display: flex; gap: 1rem; padding: 1.2rem;
+    background: var(--cream); border-radius: 0.75rem;
+  }
+  .contact-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .contact-label { font-size: 0.72rem; letter-spacing: 0.08em; color: var(--text-light); margin-bottom: 0.2rem; }
+  .contact-value { font-size: 0.9rem; color: var(--text-dark); font-weight: 500; }
+  .map-placeholder {
+    background: var(--cream); border-radius: 1.25rem; height: 300px;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px dashed var(--border); flex-direction: column; gap: 0.5rem;
+    color: var(--text-light); font-size: 0.85rem;
+  }
+  .map-placeholder .map-icon { font-size: 2rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--text-dark); color: rgba(255,255,255,0.5);
+    padding: 3rem; text-align: center;
+  }
+  .footer-logo { font-family: 'Noto Serif KR', serif; font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 0.5rem; }
+  .footer-sub { font-size: 0.8rem; line-height: 1.8; }
+  .footer-div { width: 40px; height: 2px; background: var(--amber); margin: 1.5rem auto; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    #hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; gap: 3rem; }
+    .hero-visual { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .programs-grid { grid-template-columns: 1fr; }
+    .programs-header { flex-direction: column; align-items: flex-start; }
+    .cta-box { padding: 2.5rem 1.5rem; }
+    .timeline::before { left: 60px; }
+    .tl-item { grid-template-columns: 60px 1fr; }
+  }
+
+  /* ── HAMBURGER ── */
+  .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--text-dark); margin: 5px 0; transition: 0.3s; }
+  @media (max-width: 900px) { .hamburger { display: block; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">마을과 교육공동체</div>
+  <ul class="nav-links">
+    <li><a href="#about">소개</a></li>
+    <li><a href="#programs">사업</a></li>
+    <li><a href="#activity">활동</a></li>
+    <li><a href="#contact">연락처</a></li>
+    <li><a href="#cta" class="nav-cta">후원하기</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-dots"></div>
+
+  <div class="hero-content">
+    <div class="hero-tag">대구 북구 · 비영리 교육단체</div>
+    <h1 class="hero-title">
+      마을이 함께<br>
+      <em>아이를 키웁니다</em>
+    </h1>
+    <p class="hero-quote">"한 아이를 키우는 데 마을 전체가 나서야 한다"</p>
+    <p class="hero-quote-source">— 아프리카 속담</p>
+    <div class="hero-buttons">
+      <a href="#programs" class="btn-primary">사업 살펴보기</a>
+      <a href="#cta" class="btn-secondary">후원 안내</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="hero-card-label">2026 주요 사업</div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-num">7</div>
+          <div class="stat-label">대 핵심<br>사업</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">2</div>
+          <div class="stat-label">개 교육<br>영역</div>
+        </div>
+      </div>
+      <div class="programs-list">
+        <div class="prog-item"><span class="prog-dot"></span>취약계층 청소년 인문학</div>
+        <div class="prog-item"><span class="prog-dot green"></span>기초학력 향상 프로그램</div>
+        <div class="prog-item"><span class="prog-dot"></span>청소년 자아찾기 상담</div>
+        <div class="prog-item"><span class="prog-dot green"></span>어르신 생애사 프로젝트</div>
+        <div class="prog-item"><span class="prog-dot"></span>마을공동체 평생교육</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-label">단체 소개</div>
+    <h2 class="section-title">마을이 곧 학교입니다</h2>
+    <p class="section-desc">마을과 교육공동체는 대구 북구에서 취약계층 청소년과 지역 어르신, 마을 주민이 함께 배우고 성장하는 공간을 만들어가는 비영리 교육단체입니다.</p>
+
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>교육 격차는 단순히 학력의 문제가 아닙니다. 관계의 문제이고, 기회의 문제이며, 마을 공동체의 문제입니다. 저희는 이 세 가지를 함께 풀어가고 있습니다.</p>
+        <p>대학생 자원봉사자, 지역 강사, 심리상담 전문가, 그리고 마을 어르신들이 힘을 모아 북구 대현동을 중심으로, 칠곡군·고령군까지 발길을 넓혀가고 있습니다.</p>
+        <p>2026년에는 비영리민간단체 대구광역시청 등록과 회원 배가를 통해 더 튼튼한 기반 위에서 활동을 이어가겠습니다.</p>
+      </div>
+      <div class="about-values reveal">
+        <div class="value-card">
+          <div class="value-title">📚 교육의 공공성</div>
+          <div class="value-desc">저소득층 자녀도 인문학을 배우고, 자신을 탐구하며, 가능성을 발견할 수 있어야 합니다.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-title">🤝 세대 간 연결</div>
+          <div class="value-desc">청소년과 어르신이 서로의 이야기를 나누는 마을, 그것이 진정한 공동체입니다.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-title">🌿 마을 안의 변화</div>
+          <div class="value-desc">거창한 계획보다 작은 마을 골목에서 실제 변화를 만들어냅니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section id="programs">
+  <div class="section-inner">
+    <div class="programs-header">
+      <div>
+        <div class="section-label">2026년 교육 사업</div>
+        <h2 class="section-title">7가지 핵심 프로그램</h2>
+      </div>
+      <div class="prog-tabs">
+        <button class="tab-btn active">전체</button>
+        <button class="tab-btn">청소년교육</button>
+        <button class="tab-btn">평생교육</button>
+      </div>
+    </div>
+
+    <div class="programs-grid">
+      <div class="prog-card reveal">
+        <div class="prog-icon">📖</div>
+        <div class="prog-category">청소년교육</div>
+        <div class="prog-name">취약계층 청소년 인문학 프로그램</div>
+        <div class="prog-desc">북구 대현동을 중심으로 저소득층 자녀들이 인문학적 사고와 표현력을 기를 수 있는 프로그램을 운영합니다.</div>
+        <span class="prog-tag">북구 대현동</span>
+      </div>
+
+      <div class="prog-card reveal">
+        <div class="prog-icon">✏️</div>
+        <div class="prog-category">청소년교육</div>
+        <div class="prog-name">기초학력 향상 프로그램</div>
+        <div class="prog-desc">중학교 1~2학년을 대상으로 수학 중심의 기초학력 지도를 대학생 자원봉사자와 함께 진행합니다.</div>
+        <span class="prog-tag">대학생 자원봉사</span>
+      </div>
+
+      <div class="prog-card reveal">
+        <div class="prog-icon">🌱</div>
+        <div class="prog-category">청소년교육</div>
+        <div class="prog-name">청소년 자아찾기 프로그램</div>
+        <div class="prog-desc">심리상담과 진로체험 교육을 통해 청소년이 자신을 이해하고, 미래를 그려갈 수 있도록 돕습니다.</div>
+        <span class="prog-tag">심리상담 · 진로체험</span>
+      </div>
+
+      <div class="prog-card reveal">
+        <div class="prog-icon">📜</div>
+        <div class="prog-category">청소년교육</div>
+        <div class="prog-name">청소년 고전읽기 프로그램</div>
+        <div class="prog-desc">고전 텍스트를 함께 읽고 토론하며, 깊이 있는 사고력과 언어적 감수성을 키워갑니다.</div>
+        <span class="prog-tag">독서 · 토론</span>
+      </div>
+
+      <div class="prog-card reveal">
+        <div class="prog-icon">✍️</div>
+        <div class="prog-category">평생교육</div>
+        <div class="prog-name">어르신 생애사 프로젝트</div>
+        <div class="prog-desc">자서전 쓰기와 부모-자녀가 함께 쓰는 자서전 프로젝트로 삶의 이야기를 기록하고 세대를 잇습니다.</div>
+        <span class="prog-tag">자서전 · 세대잇기</span>
+      </div>
+
+      <div class="prog-card reveal">
+        <div class="prog-icon">🚌</div>
+        <div class="prog-category">평생교육</div>
+        <div class="prog-name">마을공동체 방문 파견</div>
+        <div class="prog-desc">칠곡군, 고령군 등 인근 지역 마을공동체를 방문하여 인문학 및 평생교육 프로그램을 직접 찾아갑니다.</div>
+        <span class="prog-tag">칠곡군 · 고령군</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACTIVITY / TIMELINE -->
+<section id="activity">
+  <div class="section-inner">
+    <div class="section-label">걸어온 길</div>
+    <h2 class="section-title">마을과 함께 성장해왔습니다</h2>
+    <p class="section-desc">작은 시작이었지만 함께하는 사람들이 늘어나며 더 많은 마을, 더 많은 이웃에게 닿고 있습니다.</p>
+
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-year">초기</div>
+        <div class="tl-content">
+          <div class="tl-title">북구 대현동 인문학 교실 시작</div>
+          <div class="tl-desc">취약계층 청소년을 위한 첫 인문학 프로그램을 개설하며 마을 교육 활동을 시작했습니다.</div>
+        </div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-year">성장</div>
+        <div class="tl-content">
+          <div class="tl-title">청소년 자아찾기 · 고전읽기 확대</div>
+          <div class="tl-desc">심리상담, 진로체험, 고전 토론 등 프로그램이 다양해지고 참여 청소년이 늘었습니다.</div>
+        </div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-year">확장</div>
+        <div class="tl-content">
+          <div class="tl-title">어르신 생애사 프로젝트 · 마을 파견 시작</div>
+          <div class="tl-desc">세대를 아우르는 활동으로 넓어지고, 칠곡군·고령군까지 찾아가는 교육을 시작했습니다.</div>
+        </div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-year">2026</div>
+        <div class="tl-content">
+          <div class="tl-title">비영리민간단체 등록 · 회원 배가 목표</div>
+          <div class="tl-desc">대구광역시청 비영리민간단체 등록을 추진하며, 후원과 자원봉사 네트워크를 더욱 넓혀갑니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="section-inner">
+    <div class="cta-box reveal">
+      <span class="cta-emoji">💚</span>
+      <div class="cta-title">마을을 함께 만들어 가실래요?</div>
+      <p class="cta-desc">후원 한 번이 북구 대현동 어느 골목의 아이에게, 삶의 이야기를 쓰는 어르신에게 닿습니다. 작은 마음들이 모여 마을이 됩니다.</p>
+      <a href="mailto:contact@maeulgyo.kr" class="btn-primary" style="display:inline-block">후원 문의하기</a>
+      <div class="cta-info">
+        <strong>재능기부도 환영합니다.</strong><br>
+        강의, 멘토링, 심리상담, 디자인, IT — 당신의 재능이 마을을 바꿉니다.<br>
+        회원가입 문의 · 자원봉사 신청도 언제든 연락 주세요.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-label">연락처</div>
+    <h2 class="section-title">찾아오세요</h2>
+    <div class="contact-grid">
+      <div class="contact-items reveal">
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-label">주소</div>
+            <div class="contact-value">대구광역시 북구 대현동</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <div class="contact-label">이메일</div>
+            <div class="contact-value">문의: 전화 또는 방문 상담</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🤝</div>
+          <div>
+            <div class="contact-label">협력기관</div>
+            <div class="contact-value">협동조합 소이랩 (대구)</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🏛️</div>
+          <div>
+            <div class="contact-label">등록추진</div>
+            <div class="contact-value">대구광역시청 비영리민간단체 (2026)</div>
+          </div>
+        </div>
+      </div>
+      <div class="map-placeholder reveal">
+        <div class="map-icon">🗺️</div>
+        <div>대구 북구 대현동</div>
+        <div style="font-size:0.75rem; margin-top:0.3rem;">지도는 주소 확정 후 연동 예정</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">마을과 교육공동체</div>
+  <div class="footer-div"></div>
+  <div class="footer-sub">
+    대구광역시 북구 대현동<br>
+    "한 아이를 키우는 데 마을 전체가 나서야 한다" — 아프리카 속담<br><br>
+    © 2026 마을과 교육공동체. All rights reserved.
+  </div>
+</footer>
+
+<script>
+// Scroll nav shadow
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Tab filter (simple)
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    const filter = this.textContent.trim();
+    document.querySelectorAll('.prog-card').forEach(card => {
+      const cat = card.querySelector('.prog-category').textContent;
+      if (filter === '전체' || cat === filter) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+});
+
+// Hamburger (mobile)
+function toggleMenu() {
+  const links = document.querySelector('.nav-links');
+  if (links.style.display === 'flex') {
+    links.style.display = '';
+  } else {
+    links.style.cssText = 'display:flex; flex-direction:column; position:fixed; top:60px; left:0; right:0; background:rgba(253,250,245,0.98); padding:1.5rem 2rem; gap:1rem; backdrop-filter:blur(12px); border-bottom:1px solid rgba(45,90,61,0.1); z-index:99;';
+  }
+}
+</script>
+</body>
+</html>
